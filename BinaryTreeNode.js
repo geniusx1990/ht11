@@ -93,27 +93,28 @@ class BinaryTree {
             callback(node.value);
         }
     }
+
+    isBST() {
+        return this.isBSTUtil(this.root, Number.MIN_VALUE, Number.MAX_VALUE);
+    }
+
+    isBSTUtil(node, min, max) {
+        if (node === null) {
+            return true;
+        }
+
+        if (node.value < min || node.value > max) {
+            return false;
+        }
+
+        return (
+            this.isBSTUtil(node.left, min, node.value - 1) &&
+            this.isBSTUtil(node.right, node.value + 1, max)
+        );
+    }
+
 }
 
-
-function isBST(node) {
-    if (node == null) return 1;
-
-    // false if the max of the left is > than us
-    if (node.left != null && maxValue(node.left) > node.data)
-        return 0;
-
-    // false if the min of the right is <= than us
-    if (node.right != null && minValue(node.right) < node.data)
-        return 0;
-
-    // false if, recursively, the left or right is not a BST
-    if (!isBST(node.left) || !isBST(node.right))
-        return 0;
-
-    // passing all that, it's a BST
-    return 1;
-}
 
 
 
@@ -139,7 +140,8 @@ console.log('search 7', searchResult ? "found" : "didn't find");
 
 
 
-if (isBST(tree))
+if (tree.isBST()) {
     console.log('Is BST');
-else
+} else {
     console.log('Not a BST');
+}

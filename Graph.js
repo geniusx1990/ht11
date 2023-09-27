@@ -39,29 +39,33 @@ class Graph {
         return result;
     }
 
-    // Breadth-First Search (BFS) algorithm
-    bfs(root) {
-        const visited = new Set();
-        const queue = [root];
-        const result = [];
+// Breadth-First Search (BFS) algorithm to find the shortest path
+// Breadth-First Search (BFS) algorithm to find the shortest path with edge weights
+bfsShortestPath(startVertex, endVertex) {
+    const visited = new Set();
+    const queue = [[startVertex, []]];
 
-        while (queue.length > 0) {
-            const currentVertex = queue.shift();
+    while (queue.length > 0) {
+        const [currentVertex, path] = queue.shift();
 
-            if (!visited.has(currentVertex)) {
-                visited.add(currentVertex);
-                result.push(currentVertex);
-            }
+        if (currentVertex === endVertex) {
+            return [...path, currentVertex]; // Return the shortest path when the destination is reached
+        }
 
-            for (const neighbor of this.vertices.get(currentVertex).keys()) {
+        if (!visited.has(currentVertex)) {
+            visited.add(currentVertex);
+
+            for (const [neighbor, weight] of this.vertices.get(currentVertex).entries()) {
                 if (!visited.has(neighbor)) {
-                    queue.push(neighbor);
+                    const newPath = [...path, currentVertex];
+                    queue.push([neighbor, newPath]);
                 }
             }
         }
-
-        return result;
     }
+
+    return null; // If no path exists
+}
 
     // Dijkstra's Algorithm to find the shortest path
     dijkstraShortestPath(startVertex, endVertex) {
@@ -134,5 +138,7 @@ const shortestPath = graph.dijkstraShortestPath('A', 'D');
 console.log('Shortest Path (Dijkstra Algorithm):', shortestPath);
 
 // Use BFS to find the shortest path
-const bfsShortestPath = graph.bfs('A');
+const bfsShortestPath = graph.bfsShortestPath('A', 'D');
 console.log('Shortest Path (BFS):', bfsShortestPath);
+
+console.log(graph)
